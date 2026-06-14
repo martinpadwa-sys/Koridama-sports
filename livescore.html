@@ -2,11 +2,12 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Live Score - Koridama Sports</title>
+  <title>Live Score Pro - Koridama</title>
+
   <style>
     body {
       font-family: Arial;
-      background: #0f172a;
+      background: #0b1220;
       color: white;
       margin: 0;
     }
@@ -30,11 +31,21 @@
       padding: 15px;
       margin-bottom: 10px;
       border-radius: 10px;
+      transition: 0.3s;
+    }
+
+    .match:hover {
+      transform: scale(1.02);
+    }
+
+    .live {
+      color: #22c55e;
+      font-weight: bold;
     }
 
     .loading {
-      text-align: center;
       color: #94a3b8;
+      text-align: center;
     }
   </style>
 </head>
@@ -42,16 +53,16 @@
 <body>
 
 <header>
-  🔴 Live Match - Koridama Sports
+  🔴 LIVE SCORE PRO - Koridama Sports
 </header>
 
-<div class="container" id="live">
+<div class="container" id="box">
   <p class="loading">Mengambil data pertandingan...</p>
 </div>
 
 <script>
 async function loadLive() {
-  const box = document.getElementById("live");
+  const box = document.getElementById("box");
 
   try {
     const res = await fetch("https://www.thesportsdb.com/api/v1/json/3/eventsnextleague.php?id=4328");
@@ -64,6 +75,7 @@ async function loadLive() {
       div.className = "match";
 
       div.innerHTML = `
+        <div class="live">● Jadwal / Live</div>
         <div><b>${match.strEvent}</b></div>
         <div>${match.dateEvent} | ${match.strTime}</div>
       `;
@@ -71,12 +83,15 @@ async function loadLive() {
       box.appendChild(div);
     });
 
-  } catch (e) {
-    box.innerHTML = "<p>Gagal load data live.</p>";
+  } catch (err) {
+    box.innerHTML = "<p>Gagal mengambil data.</p>";
   }
 }
 
 loadLive();
+
+// 🔁 AUTO REFRESH tiap 60 detik
+setInterval(loadLive, 60000);
 </script>
 
 </body>
